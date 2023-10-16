@@ -63,12 +63,19 @@ def decrypt_folder(folder_path, password):
 
 def help_command():
     print("Available commands:")
-    print("help           > show this list")
-    print("exit/quit      > exit the program")
-    print("enc [password] > encrypts the contents of the vault.")
-    print("dec [password] > decrypts the contents of the vault.")
+    print("help                  > show this list")
+    print("exit/quit             > exit the program")
+    print("enc [password]        > encrypts the contents of the vault.")
+    print("enc [path] [password] > encrypts the contents of the selected path.")
+    print("dec [password]        > decrypts the contents of the vault.")
+    print("dec [path] [password] > decrypts the contents of the selected path.")
 
 
+def check_for_vault():
+    if not os.path.exists("vault"):
+        os.mkdir("vault")
+
+        
 def main():
     while True:
         command = input("enc|dec [pw] > ").strip().split(" ")
@@ -79,17 +86,54 @@ def main():
                 print("Are you sure you want to encrypt the vault with the password '"+command[1]+"'? this cannot be undone.")
                 outcome = input("Y/N > ")
                 if outcome.lower() in ["y","yes","true","siummus"]:
+                    check_for_vault()
                     encrypt_folder("vault", command[1])
+
+
+            elif len(command) == 3:
+                try:
+                    print("Are you sure you want to encrypt the target path with the password '"+command[2]+"'? this cannot be undone.")
+                    outcome = input("Y/N > ")
+                    if outcome.lower() in ["y","yes","true","siummus"]:
+                        check_for_vault()
+                        encrypt_folder(command[1], command[2])                       
+                except:
+                    print("Invalid Syntax. type 'help' for a list of commands.")
+
             else:
                 print("Usage: enc [password]")
+
+
+
+
+
         elif command[0].lower() == "dec":
             if len(command) == 2:
                 print("Are you sure you want to decrypt the vault with the password '"+command[1]+"'? this cannot be undone.")
                 outcome = input("Y/N > ")
                 if outcome.lower() in ["y","yes","true","siummus"]:
+                    check_for_vault()
                     decrypt_folder("vault", command[1])
+
+
+
+            elif len(command) == 3:
+                try:
+                    print("Are you sure you want to decrypt the target path with the password '"+command[2]+"'? this cannot be undone.")
+                    outcome = input("Y/N > ")
+                    if outcome.lower() in ["y","yes","true","siummus"]:
+                        check_for_vault()
+                        decrypt_folder(command[1], command[2])                       
+                except:
+                    print("Invalid Syntax. type 'help' for a list of commands.")
+
+
+
+                    
             else:
                 print("Usage: dec [password]")
+
+                
         elif command[0].lower() == "help":
             help_command()
 
