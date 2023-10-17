@@ -90,13 +90,20 @@ def main():
                     encrypt_folder("vault", command[1])
 
 
-            elif len(command) == 3:
+            elif len(command) >= 3:
                 try:
                     print("Are you sure you want to encrypt the target path with the password '"+command[2]+"'? this cannot be undone.")
                     outcome = input("Y/N > ")
                     if outcome.lower() in ["y","yes","true","siummus"]:
                         check_for_vault()
-                        encrypt_folder(command[1], command[2])                       
+                        pw = command.pop(-1)
+                        command.pop()
+                        path = ""
+                        for c in command:
+                            if path != "":
+                                path += " "
+                            path += c
+                        encrypt_folder(path, pw)                       
                 except:
                     print("Invalid Syntax. type 'help' for a list of commands.")
 
@@ -117,15 +124,25 @@ def main():
 
 
 
-            elif len(command) == 3:
+            elif len(command) >= 3:
                 try:
                     print("Are you sure you want to decrypt the target path with the password '"+command[2]+"'? this cannot be undone.")
                     outcome = input("Y/N > ")
                     if outcome.lower() in ["y","yes","true","siummus"]:
                         check_for_vault()
-                        decrypt_folder(command[1], command[2])                       
+                        pw = command.pop(-1)
+                        command.pop()
+                        path = ""
+                        for c in command:
+                            if path != "":
+                                path += " "
+                            path += c
+                        decrypt_folder(path, pw)                       
                 except:
                     print("Invalid Syntax. type 'help' for a list of commands.")
+
+            else:
+                print("Usage: enc [password]")
 
 
 
@@ -146,7 +163,7 @@ def main():
 
 
 
-print("Supercrypter V. 1.0.1 is now running. type 'help' for a list of commands.")
+print("Supercrypter V. 1.0.2 is now running. type 'help' for a list of commands.")
 main()
 print("Program terminated.")
 
