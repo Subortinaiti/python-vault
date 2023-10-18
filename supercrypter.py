@@ -143,12 +143,8 @@ def main():
 
             else:
                 print("Usage: enc [password]")
+  
 
-
-
-                    
-            else:
-                print("Usage: dec [password]")
 
                 
         elif command[0].lower() == "help":
