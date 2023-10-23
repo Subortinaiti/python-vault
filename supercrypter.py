@@ -1,5 +1,23 @@
 import os
 
+def encrypt_name(plaintext, password):
+    encrypted = []
+    for i in range(len(plaintext)):
+        encrypted_char = ord(plaintext[i]) ^ ord(password[i % len(password)])
+        encrypted.append(encrypted_char)
+    return bytes(encrypted).hex()
+
+def decrypt_name(encrypted_hex, password):
+    encrypted_bytes = bytes.fromhex(encrypted_hex)
+    decrypted = []
+    for i in range(len(encrypted_bytes)):
+        decrypted_char = encrypted_bytes[i] ^ ord(password[i % len(password)])
+        decrypted.append(chr(decrypted_char))
+    return ''.join(decrypted)
+
+
+
+
 def encrypt_file(filename, password, goalfile):
     try:
         with open(filename, 'rb') as file:
@@ -47,7 +65,8 @@ def encrypt_folder(folder_path, password):
         for filename in files:
             if not filename.endswith(".encrypted"):
                 file_path = os.path.join(root, filename)
-                encrypted_file_path = os.path.join(root, f"{filename}.encrypted")
+                newFileName = encrypt_name(filename,password)
+                encrypted_file_path = os.path.join(root, f"{newFileName}.encrypted")
                 encrypt_file(file_path, password, encrypted_file_path)
                 os.remove(file_path)
 
@@ -55,8 +74,11 @@ def decrypt_folder(folder_path, password):
     for root, dirs, files in os.walk(folder_path):
         for filename in files:
             if filename.endswith(".encrypted"):
+                print(filename[:-10])
+                newFileName = decrypt_name(filename[:-10],password)
+                
                 file_path = os.path.join(root, filename)
-                decrypted_file_path = os.path.join(root, filename[:-9])  # Remove the ".encrypted" extension
+                decrypted_file_path = os.path.join(root, newFileName)  # Remove the ".encrypted" extension
                 decrypt_file(file_path, password, decrypted_file_path)
                 os.remove(file_path)
 
