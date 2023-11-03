@@ -114,12 +114,12 @@ def main():
 
             elif len(command) >= 3:
                 try:
-                    print("Are you sure you want to encrypt the target path with the password '"+command[2]+"'? this cannot be undone.")
+                    print("Are you sure you want to encrypt the target path with the password '"+command[-1]+"'? this cannot be undone.")
                     outcome = input("Y/N > ")
                     if outcome.lower() in ["y","yes","true","siummus"]:
                         check_for_vault()
-                        pw = command.pop(-1)
-                        command.pop()
+                        pw = command.pop()
+                        command.pop(0)
                         path = ""
                         for c in command:
                             if path != "":
@@ -152,14 +152,14 @@ def main():
                     outcome = input("Y/N > ")
                     if outcome.lower() in ["y","yes","true","siummus"]:
                         check_for_vault()
-                        pw = command.pop(-1)
-                        command.pop()
+                        pw = command.pop()
+                        command.pop(0)
                         path = ""
                         for c in command:
                             if path != "":
                                 path += " "
                             path += c
-                        decrypt_folder(path, pw)                       
+                        decrypt_folder(path, pw)                      
                 except:
                     print("Invalid Syntax. type 'help' for a list of commands.")
 
